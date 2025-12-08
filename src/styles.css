@@ -19,6 +19,51 @@ html,body{
 #ui{
   margin:8px 0 0 16px;
   z-index:20;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#auth-container, #items-container {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 10px;
+  border-radius: 4px;
+  max-width: 300px;
+}
+
+#auth-container input {
+  display: block;
+  margin-bottom: 5px;
+  padding: 4px;
+  width: 100%;
+  background: #222;
+  border: 1px solid #444;
+  color: #fff;
+}
+
+#auth-container button, #items-container button {
+  background: var(--accent);
+  border: none;
+  padding: 4px 8px;
+  cursor: pointer;
+  color: #000;
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+#items-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 5px;
+}
+
+#items-list li {
+  padding: 2px 0;
+  border-bottom: 1px solid #333;
+}
+
+.hidden {
+  display: none !important;
 }
 
 h1{

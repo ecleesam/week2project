@@ -9,6 +9,26 @@
 </head>
 <body>
   <div id="ui">
+    <div id="auth-container">
+      <div id="login-form">
+        <h3>Login</h3>
+        <input type="text" id="username" placeholder="Username" />
+        <input type="password" id="password" placeholder="Password" />
+        <button id="btn-login">Login</button>
+        <button id="btn-register">Register</button>
+      </div>
+      <div id="user-info" class="hidden">
+        <span>Welcome, <span id="display-username">User</span>!</span>
+        <button id="btn-logout">Logout</button>
+      </div>
+    </div>
+    
+    <div id="items-container">
+      <h3>Shop Items</h3>
+      <button id="btn-load-items">Load Items</button>
+      <ul id="items-list"></ul>
+    </div>
+
     <h1>Mini Asteroids</h1>
     <div class="hud">
       <span id="score">Score: 0</span>
@@ -36,6 +56,7 @@
     </div>
   </div>
 
+  <script src="api.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
