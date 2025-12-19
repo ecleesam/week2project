@@ -22,6 +22,7 @@ html,body{
   display: flex;
   flex-direction: column;
   gap: 10px;
+  position: absolute;
 }
 
 #auth-container, #items-container {
@@ -29,6 +30,14 @@ html,body{
   padding: 10px;
   border-radius: 4px;
   max-width: 300px;
+  backdrop-filter: blur(5px);
+}
+
+#items-container {
+  position: absolute;
+  top: 8px;
+  right: 16px;
+  z-index: 20;
 }
 
 #auth-container input {
@@ -55,11 +64,14 @@ html,body{
   list-style: none;
   padding: 0;
   margin-top: 5px;
+  max-height: 300px;
+  overflow-y: auto;
 }
 
 #items-list li {
-  padding: 2px 0;
+  padding: 5px 0;
   border-bottom: 1px solid #333;
+  font-size: 0.9em;
 }
 
 .hidden {
@@ -134,4 +146,10 @@ canvas{
   justify-content: center;
   align-items: center;
   width: 100%;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  pointer-events: none;
 }

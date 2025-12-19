@@ -260,6 +260,13 @@ function update(dt){
   if (game.asteroids.length === 0) {
     game.wave += 1;
     spawnInitialAsteroids(CONFIG.asteroid.largeCount + game.wave - 1);
+    
+    // Award credits for passing wave
+    if (typeof earnCredits === 'function') {
+        earnCredits(100); 
+        // Show a small notification on the overlay or console
+        console.log("Wave passed! Earned 100 credits.");
+    }
   }
 
   // update HUD

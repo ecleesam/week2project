@@ -3,8 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Asteroids
-  </title>
+  <title>Asteroids</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -18,17 +17,12 @@
         <button id="btn-register">Register</button>
       </div>
       <div id="user-info" class="hidden">
-        <span>Welcome, <span id="display-username">User</span>!</span>
-        <button id="btn-logout">Logout</button>
+        <div>Welcome, <span id="display-username">User</span>!</div>
+        <div style="margin-top: 5px; color: #ffd700;">Credits: <span id="credits-display">0</span></div>
+        <button id="btn-logout" style="margin-top: 5px;">Logout</button>
       </div>
     </div>
     
-    <div id="items-container">
-      <h3>Shop Items</h3>
-      <button id="btn-load-items">Load Items</button>
-      <ul id="items-list"></ul>
-    </div>
-
     <h1>Mini Asteroids</h1>
     <div class="hud">
       <span id="score">Score: 0</span>
@@ -42,7 +36,14 @@
       ↑ / W thrust<br>
       Space fire<br>
       P pause
-</div>
+    </div>
+  </div>
+
+  <div id="items-container">
+      <h3>Shop Items</h3>
+      <button id="btn-load-items">Load Shop</button>
+      <ul id="items-list"></ul>
+  </div>
 
   <div class="game-container">
     <canvas id="game" width="900" height="600"></canvas>

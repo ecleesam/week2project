@@ -9,7 +9,10 @@ async function login(username, password) {
             body: JSON.stringify({ username, password })
         });
 
-        if (!response.ok) throw new Error('Login failed');
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(errorText || 'Login failed');
+        }
 
         const data = await response.json();
         localStorage.setItem('jwt_token', data.token);
@@ -30,7 +33,10 @@ async function register(username, password) {
             body: JSON.stringify({ username, password })
         });
 
-        if (!response.ok) throw new Error('Registration failed');
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(errorText || 'Registration failed');
+        }
         
         alert('Registration successful! Please login.');
     } catch (error) {
@@ -45,7 +51,50 @@ function logout() {
     updateAuthUI();
 }
 
-// Items Functions
+// Shop & Items Functions
+async function fetchCredits() {
+    const token = localStorage.getItem('jwt_token');
+    if (!token) return;
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/shop/credits`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (response.ok) {
+            const data = await response.json();
+            const creditsEl = document.getElementById('credits-display');
+            if (creditsEl) creditsEl.textContent = data.credits;
+        }
+    } catch (error) {
+        console.error('Error fetching credits:', error);
+    }
+}
+
+async function earnCredits(amount) {
+    const token = localStorage.getItem('jwt_token');
+    if (!token) return;
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/shop/earn-credits`, {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` 
+            },
+            body: JSON.stringify({ amount })
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log(data.message);
+            const creditsEl = document.getElementById('credits-display');
+            if (creditsEl) creditsEl.textContent = data.totalCredits;
+        }
+    } catch (error) {
+        console.error('Error earning credits:', error);
+    }
+}
+
 async function fetchItems() {
     const token = localStorage.getItem('jwt_token');
     if (!token) {
@@ -78,13 +127,54 @@ async function fetchItems() {
     }
 }
 
+async function buyItem(itemId) {
+    const token = localStorage.getItem('jwt_token');
+    if (!token) return;
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/shop/buy/${itemId}`, {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        const data = await response.json();
+        
+        if (response.ok) {
+            alert(data.message);
+            // Update credits display
+            const creditsEl = document.getElementById('credits-display');
+            if (creditsEl) creditsEl.textContent = data.remainingCredits;
+        } else {
+            alert('Purchase failed: ' + (data.message || response.statusText));
+        }
+    } catch (error) {
+        console.error('Error buying item:', error);
+        alert('Error buying item');
+    }
+}
+
 function displayItems(items) {
     const list = document.getElementById('items-list');
     list.innerHTML = '';
     
     items.forEach(item => {
         const li = document.createElement('li');
-        li.textContent = `${item.name} - Cost: ${item.cost}`;
+        li.style.display = 'flex';
+        li.style.justifyContent = 'space-between';
+        li.style.alignItems = 'center';
+        li.style.marginBottom = '5px';
+
+        // Use item.value for cost, item.name for the cool name
+        const infoSpan = document.createElement('span');
+        infoSpan.textContent = `${item.name} (${item.category === 0 ? 'Weapon' : 'PowerUp'}) - Cost: ${item.value}`;
+        
+        const buyBtn = document.createElement('button');
+        buyBtn.textContent = 'Buy';
+        buyBtn.onclick = () => buyItem(item.id);
+        buyBtn.style.marginLeft = '10px';
+
+        li.appendChild(infoSpan);
+        li.appendChild(buyBtn);
         list.appendChild(li);
     });
 }
@@ -101,6 +191,7 @@ function updateAuthUI() {
         loginForm.classList.add('hidden');
         userInfo.classList.remove('hidden');
         displayUsername.textContent = username;
+        fetchCredits(); // Fetch credits when logged in
     } else {
         loginForm.classList.remove('hidden');
         userInfo.classList.add('hidden');
